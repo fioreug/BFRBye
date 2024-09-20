@@ -2,6 +2,8 @@ import time
 import logging
 import cv2
 import mediapipe as mp
+import winsound
+import atexit
 
 logging.basicConfig(
     filename="app.log",
@@ -12,7 +14,10 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M",
 )
 
-sleep = 2.5
+def exit_handler():
+    logging.info("Exiting application")
+
+sleep = 2
 
 mp_hands = mp.solutions.hands
 mp_face_detection=mp.solutions.face_detection.FaceDetection(min_detection_confidence=0.7)
@@ -20,6 +25,8 @@ mp_drawing=mp.solutions.drawing_utils
 
 webcam=cv2.VideoCapture(0)
 picked = 0
+
+logging.warning("Starting application")
 
 while webcam.isOpened():
     success, img = webcam.read()
@@ -58,17 +65,19 @@ while webcam.isOpened():
             #counter+=1
             #print(counter)
     else:
-        sleep = 2.5
+        sleep = 2
 
-    cv2.imshow("io",img)
+    #cv2.imshow("io",img)
     
     if(picked):
-        print('\a')
+        #print('\a')
+        winsound.Beep(1500, 1000) # frequency in Hz, duration in ms
         print("STOP")
-        logging.warning("Tried picking!")
+        logging.warning("Hands up!")
         picked=0
         sleep = 2
     
     time.sleep(sleep)
     if cv2.waitKey(100) & 0xFF == ord("q"):
+        logging.info("Exiting application")
         break
