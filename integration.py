@@ -4,6 +4,10 @@ import cv2
 import mediapipe as mp
 import winsound
 import atexit
+from datetime import datetime
+
+PICDIR = "./pics/"
+PICFORMAT = ".jpg"
 
 logging.basicConfig(
     filename="app.log",
@@ -19,7 +23,8 @@ def exit_handler():
 
 sleep = 2
 
-mp_hands = mp.solutions.hands
+mp_hands1 = mp.solutions.hands
+mp_hands2 = mp_hands1.Hands()
 mp_face_detection=mp.solutions.face_detection.FaceDetection(min_detection_confidence=0.7)
 mp_drawing=mp.solutions.drawing_utils
 
@@ -34,7 +39,7 @@ while webcam.isOpened():
     # face detection using MediaPipe
     img =cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
     results_face=mp_face_detection.process(img)
-    results_hands = mp_hands.Hands().process(img)
+    results_hands = mp_hands2.process(img)
     
     if results_hands.multi_hand_landmarks and results_face.detections:
 
@@ -61,7 +66,7 @@ while webcam.isOpened():
                         picked+=1
                         break
 
-                mp_drawing.draw_landmarks(img, hand_landmarks, connections=mp_hands.HAND_CONNECTIONS)
+                mp_drawing.draw_landmarks(img, hand_landmarks, connections=mp_hands1.HAND_CONNECTIONS)
             #counter+=1
             #print(counter)
     else:
@@ -72,6 +77,9 @@ while webcam.isOpened():
     if(picked):
         #print('\a')
         winsound.Beep(1500, 1000) # frequency in Hz, duration in ms
+        #img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+        filename = PICDIR + datetime.now().strftime('%Y%m%d-%H%M%S') + PICFORMAT
+        cv2.imwrite(filename,img)
         print("STOP")
         logging.warning("Hands up!")
         picked=0
