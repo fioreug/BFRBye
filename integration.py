@@ -5,9 +5,20 @@ import mediapipe as mp
 import winsound
 import atexit
 from datetime import datetime
+import tkinter as tk
+from tkinter import simpledialog
+
+import requests
 
 PICDIR = "./pics/"
 PICFORMAT = ".jpg"
+
+root = tk.Tk()
+root.withdraw()  # ocultar ventana principal
+
+NOTION_TOKEN = ""  # token de la integración
+DATABASE_ID = ""  # ID  base de datos en Notion
+
 
 logging.basicConfig(
     filename="app.log",
@@ -20,6 +31,36 @@ logging.basicConfig(
 
 def exit_handler():
     logging.info("Exiting application")
+
+
+headers = {
+    "Authorization": f"Bearer {NOTION_TOKEN}",
+    "Content-Type": "application/json",
+    "Notion-Version": "2022-06-28"
+}
+
+def send_to_notion_db(text):
+    date = datetime.now().isoformat()
+    
+    data = {
+        "parent": {"database_id": DATABASE_ID},
+        "properties": {
+            "Why": {
+                "title": [{"text": {"content": text}}]
+            },
+            "Date": {
+                "date": {"start": date}
+            }
+        }
+    }
+    
+    url = "https://api.notion.com/v1/pages"
+    res = requests.post(url, headers=headers, json=data)
+    
+    if res.status_code == 200:
+        print("Saved in Notion")
+    else:
+        print("Error:", res.text)
 
 sleep = 2
 
@@ -84,6 +125,10 @@ while webcam.isOpened():
         logging.warning("Hands up!")
         picked=0
         sleep = 2
+        respuesta = simpledialog.askstring("Hands up!", "Tell me why")
+        if(respuesta):
+            send_to_notion_db(respuesta)
+
     
     time.sleep(sleep)
     if cv2.waitKey(100) & 0xFF == ord("q"):
