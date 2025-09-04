@@ -1,8 +1,11 @@
+import base64
+import os
 import tkinter as tk
 from tkinter import messagebox
 from threading import Thread
-from .config import load_config, save_config
-from .tracker import HandTracker
+from bfrbye.icon import icon
+from bfrbye.config import load_config, save_config
+from bfrbye.tracker import HandTracker
 
 def create_main_window():
     """
@@ -10,9 +13,20 @@ def create_main_window():
     """
     root = tk.Tk()
     root.title("BFRBye")
-    icon = tk.PhotoImage(file="bfrbye/icon.png")
-    root.iconphoto(True, icon)
     root.geometry("280x120")
+
+    # Set icon
+    try:
+        icondata= base64.b64decode(icon)
+        tempFile= "icon.ico"
+        iconfile= open(tempFile,"wb")
+
+        iconfile.write(icondata)
+        iconfile.close()
+        root.wm_iconbitmap(tempFile)
+        os.remove(tempFile)
+    except Exception as e:
+        print(f"Error creating icon: {e}")
 
     # Load config
     config = load_config()
