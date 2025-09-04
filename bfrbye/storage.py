@@ -38,19 +38,22 @@ class NotionClient():
 def save_response(response: str, config: dict):
 
     date = datetime.now().isoformat()
-    method = config["storage"]["method"]
+    methods = config["storage"]["methods"]
+    print(f"Saving response using {methods}")
 
-    if method == "csv":
+    if "csv" in methods:
         file = Path(config["storage"]["output_file"])
         with open(file, "a", newline="") as f:
             writer = csv.writer(f)
             writer.writerow([date, response])
+        print("Saved in CSV")
 
-    if method == "txt":
+    if "txt" in methods:
         file = Path(config["storage"]["output_file"])
         with open(file, "a") as f:
             f.write(f"{date},{response}\n")
+        print("Saved in TXT")
 
-    if method == "notion":
+    if "notion" in methods:
         notion = NotionClient(config["notion"]["token"],config["notion"]["database_id"])
         notion.send_to_db(response, date)
