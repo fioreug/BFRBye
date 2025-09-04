@@ -9,8 +9,8 @@ from bfrbye.dialog import show_input_dialog
 from bfrbye.storage import save_response
 
 
-PICDIR = "./pics/"
-PICFORMAT = ".jpg"
+#PICDIR = "./pics/"
+#PICFORMAT = ".jpg"
 
 class HandTracker:
     def __init__(self, config):
@@ -37,8 +37,8 @@ class HandTracker:
                 picked, img = self.detect_hand_on_face(img)
                 if picked:
                     winsound.Beep(1500, 1000) # frequency in Hz, duration in ms
-                    filename = PICDIR + datetime.now().strftime('%Y%m%d-%H%M%S') + PICFORMAT
-                    cv2.imwrite(filename,img)
+                    #filename = PICDIR + datetime.now().strftime('%Y%m%d-%H%M%S') + PICFORMAT
+                    #cv2.imwrite(filename,img)
                     response = []
                     thread = threading.Thread(target = show_input_dialog, args=(response,))
                     thread.start()
