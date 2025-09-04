@@ -10,6 +10,9 @@ def create_main_window():
     """
     root = tk.Tk()
     root.title("BFRBye")
+    icon = tk.PhotoImage(file="bfrbye/icon.png")
+    root.iconphoto(True, icon)
+    root.geometry("280x120")
 
     # Load config
     config = load_config()
