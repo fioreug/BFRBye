@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import winsound
 import time
+import threading
 from datetime import datetime
 
 from bfrbye.dialog import show_input_dialog
@@ -38,10 +39,13 @@ class HandTracker:
                     winsound.Beep(1500, 1000) # frequency in Hz, duration in ms
                     filename = PICDIR + datetime.now().strftime('%Y%m%d-%H%M%S') + PICFORMAT
                     cv2.imwrite(filename,img)
-                    print("STOP")
-                    response = show_input_dialog("Enter response")
-                    if response:
-                        save_response(response, self.config)
+                    response = []
+                    thread = threading.Thread(target = show_input_dialog, args=(response,))
+                    thread.start()
+                    thread.join()
+                    
+                    if response[0]:
+                        save_response(response[0], self.config)
             
         time.sleep(2)
 
@@ -64,12 +68,13 @@ class HandTracker:
                     ymax = face_box.ymin + face_box.height
 
                     if((node.x > face_box.xmin and node.x < xmax) and (node.y > face_box.ymin and node.y < ymax)):
-                        picked +=1 
+                        picked +=1
+                        self.counter+=1
+                        print(self.counter)
                         break
                 self.mp_drawing.draw_landmarks(img, hand_landmarks, connections=self.mp_hands.HAND_CONNECTIONS)
             
-            self.counter+=1
-            print(self.counter)
+            
 
             return True if picked>0 else False, img
         
