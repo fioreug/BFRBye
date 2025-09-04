@@ -1,5 +1,5 @@
-from .main import BFRByeApp
+from .gui import create_main_window
 
 if __name__ == "__main__":
-    app = BFRByeApp()
-    app.run()
+    window = create_main_window()
+    window.mainloop()
