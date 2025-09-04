@@ -32,8 +32,13 @@ For now, please run the application from source (see [Installation](#-installati
 Clone the repository and install dependencies:
 
 ```bash
+# Clone repository
 git clone https://github.com/fioreug/bfrbye.git
 cd bfrbye
+# Create virtual environment using python 3.12
+python3.12 -m venv .venv
+.venv\Scripts\activate 
+# Install requirements
 pip install -r requirements.txt
 ```
 Run the application:
