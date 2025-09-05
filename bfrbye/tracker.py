@@ -44,7 +44,7 @@ class HandTracker:
                     thread.start()
                     thread.join()
                     
-                    if response[0]:
+                    if len(response):
                         save_response(response[0], self.config)
             
         time.sleep(2)

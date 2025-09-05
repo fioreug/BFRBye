@@ -8,5 +8,6 @@ def show_input_dialog(response):
     newWin.attributes('-topmost',True)
     
     res = simpledialog.askstring("Hands up!", "Tell me why",parent=newWin)
-    response.append(res)
+    if res:
+        response.append(res)
     newWin.destroy() 
