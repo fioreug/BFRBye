@@ -22,7 +22,7 @@ Users can write their trigger thoughts or feelings, and save them to a local fil
 ⚠️ The standalone executable is **not available yet**.  
 It will be included in future releases (starting from `v0.2.0`).
 
-For now, please run the application from source (see [Installation](#-installation-for-developers)).
+For now, please run the application from source (see next section).
 
 
 ---
