@@ -16,17 +16,8 @@ def create_main_window():
     root.geometry("280x120")
 
     # Set icon
-    try:
-        icondata= base64.b64decode(icon)
-        tempFile= "icon.ico"
-        iconfile= open(tempFile,"wb")
-
-        iconfile.write(icondata)
-        iconfile.close()
-        root.wm_iconbitmap(tempFile)
-        os.remove(tempFile)
-    except Exception as e:
-        print(f"Error creating icon: {e}")
+    icon_image = tk.PhotoImage(data=base64.b64decode(icon))
+    root.iconphoto(True, icon_image)
 
     # Load config
     config = load_config()
